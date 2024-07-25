@@ -13,7 +13,9 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
-class EmotionDetectionModelImpl(context: Context) {
+class EmotionDetectionModelImpl(
+    context: Context
+) {
     private val model = EmotionDetection.newInstance(context)
 
     private val imageProcessor = ImageProcessor.Builder()

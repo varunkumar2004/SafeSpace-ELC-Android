@@ -1,7 +1,6 @@
 package com.varunkumar.safespace.sense.sensor.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import com.varunkumar.safespace.sense.sensor.model.HealthSensors
+import com.varunkumar.safespace.sense.sensor.data.HealthSensors
 import com.varunkumar.safespace.sense.sensor.presentation.StressDetectionViewModel
 import com.varunkumar.safespace.ui.theme.primary
 

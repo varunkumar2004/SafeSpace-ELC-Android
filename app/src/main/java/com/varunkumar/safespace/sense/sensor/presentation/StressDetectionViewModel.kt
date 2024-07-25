@@ -3,7 +3,7 @@ package com.varunkumar.safespace.sense.sensor.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.varunkumar.safespace.sense.sensor.domain.StressModelApi
-import com.varunkumar.safespace.sense.sensor.model.HealthSensors
+import com.varunkumar.safespace.sense.sensor.data.HealthSensors
 import com.varunkumar.safespace.shared.SensorDataResponse
 import com.varunkumar.safespace.shared.SharedViewModelData
 import com.varunkumar.safespace.shared.StressLevelResponse

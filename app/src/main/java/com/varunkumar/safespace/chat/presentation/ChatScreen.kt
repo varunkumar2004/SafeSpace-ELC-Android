@@ -26,6 +26,9 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -33,6 +36,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,7 +45,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,15 +57,16 @@ import com.varunkumar.safespace.chat.data.ChatMessage
 import com.varunkumar.safespace.ui.theme.primary
 import com.varunkumar.safespace.ui.theme.secondary
 import com.varunkumar.safespace.utils.GridView
+import com.varunkumar.safespace.utils.Result
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.text.format
 
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
     val viewModel = hiltViewModel<ChatViewModel>()
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val shape = RoundedCornerShape(30.dp)
@@ -74,9 +78,20 @@ fun ChatScreen(
         if (state.messages.isNotEmpty()) {
             listState.animateScrollToItem(state.messages.lastIndex)
         }
+
+        when(state.result) {
+            is Result.Error -> {
+                state.result.msg?.let {
+                    snackBarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
+                }
+            } else -> {}
+        }
     }
 
     Scaffold(
+        snackbarHost = {
+            snackBarHostState.currentSnackbarData?.let { Snackbar(snackbarData = it) }
+        },
         containerColor = primary,
         topBar = {
             TopAppBar(

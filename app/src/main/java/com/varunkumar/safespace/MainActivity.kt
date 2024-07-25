@@ -35,8 +35,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.varunkumar.safespace.auth.domain.GoogleAuthClient
-import com.varunkumar.safespace.auth.presentation.SignInViewModel
 import com.varunkumar.safespace.auth.presentation.SignInScreen
+import com.varunkumar.safespace.auth.presentation.SignInViewModel
 import com.varunkumar.safespace.chat.presentation.ChatScreen
 import com.varunkumar.safespace.home.presentation.HomeScreen
 import com.varunkumar.safespace.home.presentation.HomeViewModel
@@ -44,8 +44,6 @@ import com.varunkumar.safespace.sense.camera.presentation.CameraScreen
 import com.varunkumar.safespace.sense.camera.presentation.ImageDetectionViewModel
 import com.varunkumar.safespace.sense.sensor.presentation.SenseScreen
 import com.varunkumar.safespace.shared.Routes
-import com.varunkumar.safespace.shared.SharedViewModelData
-import com.varunkumar.safespace.shared.UserData
 import com.varunkumar.safespace.ui.theme.SafespaceTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -73,7 +71,7 @@ class MainActivity : ComponentActivity() {
 
                 val startDestination =
                     if (googleAuthClient.getSignedInUser() == null) Routes.Login.route
-                    else Routes.Sense.route
+                    else Routes.Home.route
 
                 NavHost(navController = navController, startDestination = startDestination) {
                     composable(route = Routes.Home.route) {

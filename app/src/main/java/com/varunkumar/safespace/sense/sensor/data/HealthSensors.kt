@@ -1,4 +1,4 @@
-package com.varunkumar.safespace.sense.sensor.model
+package com.varunkumar.safespace.sense.sensor.data
 
 sealed class HealthSensors(
     val label: String,
