@@ -17,22 +17,29 @@ class EmotionDetectionModelImpl(
     context: Context
 ) {
     private val model = EmotionDetection.newInstance(context)
-
-    private val imageProcessor = ImageProcessor.Builder()
-        .add(ResizeOp(64, 64, ResizeOp.ResizeMethod.BILINEAR))
-        .build()
-    private val inputFeature =
-        TensorBuffer.createFixedSize(intArrayOf(1, 64, 64, 3), DataType.FLOAT32)
+    private var imageProcessor: ImageProcessor? = null
+    private var inputFeature: TensorBuffer? = null
     private var tensorImage = TensorImage(DataType.FLOAT32)
 
     fun process(bitmap: Bitmap) = flow {
         try {
+            val height = bitmap.height
+            val width = bitmap.width
+
+            imageProcessor = ImageProcessor.Builder()
+                .add(
+                    ResizeOp(height, width, ResizeOp.ResizeMethod.BILINEAR)
+                )
+                .build()
+
             tensorImage.load(bitmap)
-            tensorImage = imageProcessor.process(tensorImage)
-            inputFeature.loadBuffer(tensorImage.buffer)
+            inputFeature =
+                TensorBuffer.createFixedSize(intArrayOf(1, height, width, 3), DataType.FLOAT32)
+            tensorImage = imageProcessor!!.process(tensorImage)
+            inputFeature!!.loadBuffer(tensorImage.buffer)
 
             val outputs = model
-                .process(inputFeature)
+                .process(inputFeature!!)
                 .outputFeature0AsTensorBuffer
                 .floatArray
 
@@ -42,8 +49,9 @@ class EmotionDetectionModelImpl(
                 Log.e("model float output", output.toString())
             }
 
-            emit(false)
+            emit(boolRes)
         } catch (e: Exception) {
+            Log.e("model cant predict", e.localizedMessage ?: "Some error occurred")
             emit(false)
         } finally {
             model.close()

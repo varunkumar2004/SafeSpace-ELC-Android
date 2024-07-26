@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                 val snackBarHostState = remember { SnackbarHostState() }
 
                 val startDestination =
-                    if (googleAuthClient.getSignedInUser() == null) Routes.Login.route
+                    if (googleAuthClient.getSignedInUser() == null) Routes.Home.route
                     else Routes.Home.route
 
                 NavHost(navController = navController, startDestination = startDestination) {
@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = Routes.Camera.route) {
                         val viewModel = hiltViewModel<ImageDetectionViewModel>()
-                        val state = viewModel.state.collectAsStateWithLifecycle().value
+                        val state by viewModel.state.collectAsStateWithLifecycle()
                         val image by viewModel.image.collectAsStateWithLifecycle()
                         val cameraController = remember {
                             LifecycleCameraController(applicationContext).apply {
@@ -114,7 +114,6 @@ class MainActivity : ComponentActivity() {
                         CameraScreen(
                             modifier = sModifier,
                             state = state,
-                            image = image,
                             controller = cameraController,
                             navController = navController,
                             onBackCameraClick = { navController.navigateUp() },

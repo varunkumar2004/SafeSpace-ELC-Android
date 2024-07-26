@@ -121,7 +121,7 @@ class ChatViewModel @Inject constructor(
                     predictNlp()
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(uiState = UiState.Error(e.localizedMessage)) }
+                _state.update { it.copy(uiState = UiState.Error(e.message)) }
             }
         }
     }

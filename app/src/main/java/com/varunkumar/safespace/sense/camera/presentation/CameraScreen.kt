@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,9 +22,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,21 +51,45 @@ import com.varunkumar.safespace.utils.Result
 fun CameraScreen(
     modifier: Modifier = Modifier,
     state: Result<Boolean>,
-    image: Bitmap?,
     controller: LifecycleCameraController,
     navController: NavHostController,
     onCameraClick: () -> Unit,
     onBackCameraClick: () -> Unit
 ) {
-    when (state) {
-        is Result.Success -> {
-            navController.navigate(Routes.Sense.route)
-        }
+    val snackBarHostState = remember {
+        SnackbarHostState()
+    }
 
-        else -> {}
+    LaunchedEffect(state) {
+        when (state) {
+            is Result.Success -> {
+                if (state.data!!) {
+                    navController.navigate(Routes.Sense.route)
+                }
+            }
+
+            is Result.Loading -> {
+                snackBarHostState.showSnackbar(
+                    message = "Loading...",
+                    duration = SnackbarDuration.Short
+                )
+            }
+
+            is Result.Error -> {
+                snackBarHostState.showSnackbar(
+                    message = state.msg ?: "Something unexpected happened.",
+                    duration = SnackbarDuration.Short
+                )
+            }
+
+            else -> Unit
+        }
     }
 
     Scaffold(
+        snackbarHost = {
+            snackBarHostState.currentSnackbarData?.let { Snackbar(it) }
+        },
         modifier = modifier,
         containerColor = secondary,
         topBar = {
@@ -78,15 +112,6 @@ fun CameraScreen(
                     }
                 }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
-                AsyncImage(
-                    model = image,
-                    modifier = Modifier.size(100.dp),
-                    contentDescription = null
-                )
-            }
         },
         bottomBar = {
             BottomAppBar(

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.varunkumar.safespace.sense.camera.domain.EmotionDetectionModelImpl
+import com.varunkumar.safespace.shared.SharedViewModelData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
@@ -20,9 +21,9 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ImageDetectionViewModel @Inject constructor(
-    private val emotionModelImpl: EmotionDetectionModelImpl,
+    private val emotionModelImpl: EmotionDetectionModelImpl
 ) : ViewModel() {
-    private val _state = MutableStateFlow<Result<Boolean>>(Result.Idle())
+    private val _state = MutableStateFlow<Result<Boolean>>(Result.Error("there was some error"))
     private val _image = MutableStateFlow<Bitmap?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -36,13 +37,18 @@ class ImageDetectionViewModel @Inject constructor(
     private fun process(bitmap: Bitmap) = emotionModelImpl.process(bitmap)
 
     fun predict(bitmap: Bitmap) {
+        _state.update { Result.Loading() }
+
         viewModelScope.launch {
             process(bitmap).catch { e ->
-                Log.e("model error", e.localizedMessage?:"model input error")
+                Log.e("model error", e.localizedMessage ?: "model input error")
                 _state.update { Result.Error(e.localizedMessage) }
             }.collect { bool ->
-                if (bool) _state.update { Result.Success(true) }
-                else _state.update { Result.Idle() }
+                if (bool) _state.update {
+                    Result.Success(bool)
+                } else _state.update {
+                    Result.Error("No Stress Detected.")
+                }
             }
         }
     }

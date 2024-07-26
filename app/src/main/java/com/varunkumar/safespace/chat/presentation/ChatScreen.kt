@@ -66,7 +66,6 @@ fun ChatScreen(
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
     val viewModel = hiltViewModel<ChatViewModel>()
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val shape = RoundedCornerShape(30.dp)
@@ -74,24 +73,13 @@ fun ChatScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val listState = rememberLazyListState()
 
-    LaunchedEffect(state) {
+    LaunchedEffect(state.messages) {
         if (state.messages.isNotEmpty()) {
             listState.animateScrollToItem(state.messages.lastIndex)
-        }
-
-        when(state.result) {
-            is Result.Error -> {
-                state.result.msg?.let {
-                    snackBarHostState.showSnackbar(it, duration = SnackbarDuration.Short)
-                }
-            } else -> {}
         }
     }
 
     Scaffold(
-        snackbarHost = {
-            snackBarHostState.currentSnackbarData?.let { Snackbar(snackbarData = it) }
-        },
         containerColor = primary,
         topBar = {
             TopAppBar(

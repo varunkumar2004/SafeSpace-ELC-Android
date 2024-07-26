@@ -22,7 +22,12 @@ class SignInViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun resetState() {
+    private fun resetState() {
         _state.update { SignInState() }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        resetState()
     }
 }
