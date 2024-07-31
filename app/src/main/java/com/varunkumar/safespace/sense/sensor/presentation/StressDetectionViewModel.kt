@@ -1,5 +1,6 @@
 package com.varunkumar.safespace.sense.sensor.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.varunkumar.safespace.sense.sensor.domain.StressModelApi
@@ -10,7 +11,10 @@ import com.varunkumar.safespace.shared.StressLevelResponse
 import com.varunkumar.safespace.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -24,7 +28,10 @@ class StressDetectionViewModel @Inject constructor(
     private val sharedViewModelData: SharedViewModelData
 ) : ViewModel() {
     private val _state = MutableStateFlow(SenseState())
-    val state = _state.asStateFlow()
+    val state = _state.flatMapLatest {
+        Log.d("slider value", it.sliderValues.toString())
+        _state
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SenseState())
 
     fun sliderChange(newValue: Float, sensor: HealthSensors) {
         when (sensor) {
@@ -48,8 +55,8 @@ class StressDetectionViewModel @Inject constructor(
 
         stressModelApi.getStressLevel(
             snoringRange = _state.value.sliderValues.snoringRate,
-            respirationRate = _state.value.sliderValues.snoringRate,
-            sleep = _state.value.sliderValues.snoringRate,
+            respirationRate = _state.value.sliderValues.respirationRate,
+            sleep = _state.value.sliderValues.sleepHours,
             heartRate = meanSensorDataResponse.heartRate,
             bloodOxygen = meanSensorDataResponse.spO2.toFloat(),
             temperature = meanSensorDataResponse.temperature
@@ -61,6 +68,7 @@ class StressDetectionViewModel @Inject constructor(
                 ) {
                     viewModelScope.launch {
                         result.body()?.let { res ->
+                            Log.d("sensor result response", res.toString())
                             sharedViewModelData.liveStressLevel.emit(res)
                             _state.update { it.copy(result = Result.Success(res.stressLevel)) }
                         }

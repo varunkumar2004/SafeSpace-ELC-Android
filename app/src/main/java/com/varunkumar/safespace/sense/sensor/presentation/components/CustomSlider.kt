@@ -41,6 +41,7 @@ fun CustomSlider(
 ) {
     val height = TextFieldDefaults.MinHeight - 5.dp
     val shape = RoundedCornerShape(40.dp)
+    val isSleep = sensor is HealthSensors.HoursOfSleepSensors
 
     Column(
         modifier = modifier
@@ -75,15 +76,17 @@ fun CustomSlider(
                             containerColor = surface
                         ),
                         content = {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = sliderPosition.toInt().toString(),
-                                    color = Color.White,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                            if (isSleep) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = sliderPosition.toInt().toString(),
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
                             }
                         }
                     )
@@ -94,11 +97,19 @@ fun CustomSlider(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        if (!isSleep) {
+                            Text("Slow")
+                        }
+
                         Text(
                             text = sensor.label,
                             fontStyle = FontStyle.Italic,
                             style = MaterialTheme.typography.bodyLarge
                         )
+
+                        if (!isSleep) {
+                            Text("Fast")
+                        }
                     }
                 }
             )

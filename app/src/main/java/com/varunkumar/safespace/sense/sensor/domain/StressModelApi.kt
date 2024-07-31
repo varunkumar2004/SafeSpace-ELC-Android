@@ -10,11 +10,11 @@ interface StressModelApi {
     @Multipart
     @POST("/")
     fun getStressLevel(
-        @Part("snoring_range") snoringRange: Float = 85f,
-        @Part("respiration_rate") respirationRate: Float = 12f,
-        @Part("body_temperature") temperature: Float = 97f,
-        @Part("blood_oxygen") bloodOxygen: Float = 105f,
-        @Part("sleep") sleep: Float = 1f,
-        @Part("heart_rate") heartRate: Float = 100f
+        @Part("snoring_range") snoringRange: Float,
+        @Part("respiration_rate") respirationRate: Float,
+        @Part("body_temperature") temperature: Float,
+        @Part("blood_oxygen") bloodOxygen: Float,
+        @Part("sleep") sleep: Float,
+        @Part("heart_rate") heartRate: Float
     ): Call<StressLevelResponse>
 }

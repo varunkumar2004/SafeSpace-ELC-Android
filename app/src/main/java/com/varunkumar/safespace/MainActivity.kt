@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                         SenseScreen(
                             modifier = sModifier,
                             sensorValues = sensorDataResponse,
-                            onDoneButtonClick = { navController.navigate(Routes.Home.route) }
+                            onDoneButtonClick = { navController.navigate(Routes.Chat.route) }
                         )
                     }
 
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
                     composable(route = Routes.Chat.route) {
                         ChatScreen(
                             modifier = sModifier,
-                            onBackButtonClick = { navController.navigateUp() }
+                            onBackButtonClick = { navController.navigate(Routes.Home.route) }
                         )
                     }
 
