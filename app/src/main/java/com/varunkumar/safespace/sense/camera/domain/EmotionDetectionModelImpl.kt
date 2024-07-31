@@ -26,6 +26,8 @@ class EmotionDetectionModelImpl(
             val height = bitmap.height
             val width = bitmap.width
 
+            Log.d("height width bitmap", "$height, $width")
+
             imageProcessor = ImageProcessor.Builder()
                 .add(
                     ResizeOp(height, width, ResizeOp.ResizeMethod.BILINEAR)

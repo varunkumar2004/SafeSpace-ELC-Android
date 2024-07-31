@@ -7,7 +7,7 @@ val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
 // custom theme colors
-val primary = Color(0xFFE7F0FF)
+val primary = Color(0xFFF7FBFF)
 val secondary = Color(0xFFC3D0FF)
 val surface = Color(0xFF000F2A)
 val tertiary = Color(0xFFFFA5A5)

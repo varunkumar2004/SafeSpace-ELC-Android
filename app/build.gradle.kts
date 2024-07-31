@@ -71,6 +71,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //ml kit for face detection
+    implementation("com.google.mlkit:face-detection:16.1.6")
+    implementation("androidx.core:core-ktx:1.13.1")
+
     //cameraX implementation
     val cameraXVersion = "1.4.0-beta02"
     implementation("androidx.camera:camera-core:${cameraXVersion}")

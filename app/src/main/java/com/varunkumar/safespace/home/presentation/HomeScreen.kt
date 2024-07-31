@@ -1,6 +1,7 @@
 package com.varunkumar.safespace.home.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -89,13 +91,12 @@ fun HomeScreen(
                 split = 0.5f,
                 topGridView = { modifier ->
                     val stress = state.stressLevel
+                    val extractStressLevel = extractStressLevel(stress)
 
                     ElevatedButton(
                         modifier = modifier,
                         colors = ButtonDefaults.elevatedButtonColors(
-                            containerColor = stress?.let { level ->
-                                extractStressLevel(level).second
-                            } ?: secondary,
+                            containerColor = secondary,
                             contentColor = Color.Black
                         ),
                         elevation = ButtonDefaults.buttonElevation(
@@ -103,12 +104,29 @@ fun HomeScreen(
                         ),
                         onClick = onSenseNavigate,
                     ) {
-                        Text(
-                            style = MaterialTheme.typography.bodyLarge,
-                            text = stress?.let { level ->
-                                extractStressLevel(level).first + " Stress"
-                            } ?: "Scan"
-                        )
+                        Column(
+                            modifier = modifier,
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            extractStressLevel?.let { pair ->
+                                Text(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(30.dp))
+                                        .background(pair.second)
+                                        .padding(vertical = 10.dp, horizontal = 16.dp),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    text = pair.first
+                                )
+
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+
+                            Text(
+                                style = MaterialTheme.typography.bodyLarge,
+                                text = "Scan Stress"
+                            )
+                        }
                     }
                 },
                 bottomGridView = { modifier ->
@@ -203,17 +221,19 @@ private fun TopAppBar(
     )
 }
 
-private fun extractStressLevel(level: String): Pair<String, Color> {
-    val stressLevel = level.trim().removeSurrounding("[", "]").toInt()
+private fun extractStressLevel(level: String?): Pair<String, Color>? {
+    return level?.let {
+        val stressLevel = level.trim().removeSurrounding("[", "]").toInt()
 
-    val colors = listOf(
-        Color(0xFFB2E8FF),
-        Color(0xFFA4D0FF),
-        Color(0xFFE1A5FF),
-        Color(0xFFFFA3B3),
-        Color(0xFFFF9191)
-    )
+        val colors = listOf(
+            Color(0xFFB2E8FF),
+            Color(0xFFA4D0FF),
+            Color(0xFFE1A5FF),
+            Color(0xFFFFA3B3),
+            Color(0xFFFF9191)
+        )
 
-    val levelName = arrayOf("Very Low", "Low", "Medium", "High", "Very High")
-    return Pair(levelName[stressLevel], colors[stressLevel])
+        val levelName = arrayOf("Very Low", "Low", "Medium", "High", "Very High")
+        Pair(levelName[stressLevel], colors[stressLevel])
+    }
 }

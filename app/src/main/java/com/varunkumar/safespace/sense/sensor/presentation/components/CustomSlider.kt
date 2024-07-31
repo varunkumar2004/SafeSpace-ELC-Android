@@ -2,8 +2,10 @@ package com.varunkumar.safespace.sense.sensor.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.varunkumar.safespace.sense.sensor.data.HealthSensors
 import com.varunkumar.safespace.sense.sensor.presentation.StressDetectionViewModel
 import com.varunkumar.safespace.ui.theme.primary
+import com.varunkumar.safespace.ui.theme.surface
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,8 +40,6 @@ fun CustomSlider(
     sensor: HealthSensors
 ) {
     val height = TextFieldDefaults.MinHeight - 5.dp
-    val steps = 4
-
     val shape = RoundedCornerShape(40.dp)
 
     Column(
@@ -53,7 +54,6 @@ fun CustomSlider(
         ) {
             Slider(
                 modifier = modifier,
-                steps = steps,
                 value = sliderPosition,
                 onValueChange = { value ->
                     viewModel.sliderChange(value, sensor)
@@ -72,9 +72,20 @@ fun CustomSlider(
                             defaultElevation = 5.dp
                         ),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.Black
+                            containerColor = surface
                         ),
-                        content = {}
+                        content = {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = sliderPosition.toInt().toString(),
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
                     )
                 },
                 track = {
@@ -87,11 +98,6 @@ fun CustomSlider(
                             text = sensor.label,
                             fontStyle = FontStyle.Italic,
                             style = MaterialTheme.typography.bodyLarge
-                        )
-
-                        Text(
-                            text = sliderPosition.toInt().toString(),
-                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }

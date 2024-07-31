@@ -35,6 +35,7 @@ import com.varunkumar.safespace.sense.sensor.presentation.components.PhysicalSen
 import com.varunkumar.safespace.shared.SensorDataResponse
 import com.varunkumar.safespace.ui.theme.primary
 import com.varunkumar.safespace.ui.theme.secondary
+import com.varunkumar.safespace.ui.theme.surface
 import com.varunkumar.safespace.utils.GridView
 
 @Composable
@@ -178,7 +179,7 @@ private fun BottomSliderBox(
                 modifier = fModifier
                     .height(TextFieldDefaults.MinHeight),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
+                    containerColor = surface,
                     contentColor = Color.White
                 ),
                 onClick = onPredictButtonClick
