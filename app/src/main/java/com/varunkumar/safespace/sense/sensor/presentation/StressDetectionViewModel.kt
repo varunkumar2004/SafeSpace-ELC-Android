@@ -55,11 +55,17 @@ class StressDetectionViewModel @Inject constructor(
 
         stressModelApi.getStressLevel(
             snoringRange = _state.value.sliderValues.snoringRate,
+//            snoringRange = 60f,
             respirationRate = _state.value.sliderValues.respirationRate,
+//            respirationRate = 20f,
             sleep = _state.value.sliderValues.sleepHours,
+//            sleep = 7f,
             heartRate = meanSensorDataResponse.heartRate,
+//            heartRate = 60f,
             bloodOxygen = meanSensorDataResponse.spO2.toFloat(),
+//            bloodOxygen = 95f,
             temperature = meanSensorDataResponse.temperature
+//            temperature = 35.5f
         ).enqueue(
             object : Callback<StressLevelResponse?> {
                 override fun onResponse(

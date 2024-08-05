@@ -45,9 +45,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -84,7 +86,10 @@ fun ChatScreen(
         topBar = {
             TopAppBar(
                 modifier = fModifier,
-                onBackButtonClick = onBackButtonClick
+                onBackButtonClick = {
+                    viewModel.stopTextToSpeech()
+                    onBackButtonClick()
+                }
             )
         }
     ) {
@@ -235,13 +240,15 @@ fun ChatItemMessage(
             containerColor = Color.Transparent
         ),
         leadingContent = {
-            Image(
-                modifier = Modifier
-                    .size(20.dp)
-                    .clip(CircleShape),
-                painter = painterImage,
-                contentDescription = null
-            )
+            if (!message.isError) {
+                Image(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape),
+                    painter = painterImage,
+                    contentDescription = null
+                )
+            }
         },
         trailingContent = {
             if (!message.isBot) {
@@ -253,7 +260,10 @@ fun ChatItemMessage(
         },
         headlineContent = {
             Text(
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = if (message.isError) TextAlign.Center else TextAlign.Start,
                 text = message.data,
+                color = if (message.isError) Color.Red else Color.Black,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

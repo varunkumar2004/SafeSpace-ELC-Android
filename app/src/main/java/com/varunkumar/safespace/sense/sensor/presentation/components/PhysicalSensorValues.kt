@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.varunkumar.safespace.shared.SensorDataResponse
 import com.varunkumar.safespace.ui.theme.secondary
+import kotlin.math.absoluteValue
 
 @Composable
 fun PhysicalSensorValues(
@@ -55,7 +56,7 @@ fun PhysicalSensorValues(
             SensorBox(
                 modifier = sensorModifier,
                 key = "Temperature",
-                value = response.temperature.toString()
+                value = response.temperature.absoluteValue.toString() + "°C"
             )
         }
     }

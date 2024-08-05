@@ -116,7 +116,7 @@ fun HomeScreen(
                                         .background(pair.second)
                                         .padding(vertical = 10.dp, horizontal = 16.dp),
                                     style = MaterialTheme.typography.bodyLarge,
-                                    text = pair.first
+                                    text = extractStressLevel.first
                                 )
 
                                 Spacer(modifier = Modifier.height(10.dp))
@@ -223,7 +223,7 @@ private fun TopAppBar(
 
 private fun extractStressLevel(level: String?): Pair<String, Color>? {
     return level?.let {
-        val stressLevel = level.trim().removeSurrounding("[", "]").toInt()
+        val stressLevel = level.trim().toInt()
 
         val colors = listOf(
             Color(0xFFB2E8FF),

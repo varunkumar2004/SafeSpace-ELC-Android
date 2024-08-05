@@ -136,6 +136,8 @@ private fun BottomSliderBox(
             style = MaterialTheme.typography.bodyMedium
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         Column(
             modifier = fModifier.align(Alignment.Center)
         ) {

@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
                 val homeViewModel = hiltViewModel<HomeViewModel>()
                 val snackBarHostState = remember { SnackbarHostState() }
 
+//                val startDestination = Routes.Sense.route
                 val startDestination =
                     if (googleAuthClient.getSignedInUser() == null) Routes.Login.route
                     else Routes.Home.route

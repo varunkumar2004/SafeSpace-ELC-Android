@@ -43,6 +43,9 @@ class ChatViewModel @Inject constructor(
                     "strictly talk about stress detection and management not about any other topic; " +
                             "also keep the answer short"
                 )
+            },
+            content("user") {
+                text("you are not supposed any maths problem or any other calculation and only answer questions in stress management and stress detection domain")
             }
         )
     )
@@ -121,18 +124,31 @@ class ChatViewModel @Inject constructor(
                     predictNlp()
                 }
             } catch (e: Exception) {
-                _state.update { it.copy(uiState = UiState.Error(e.message)) }
+                val message = e.localizedMessage ?: "Unexpected error occurred"
+                val newErrorMessage = ChatMessage(
+                    data = message,
+                    isError = true,
+                    isBot = true,
+                )
+
+                _state.update { it.copy(
+                    messages = it.messages + newErrorMessage,
+                    uiState = UiState.Error(message)
+                ) }
             }
+        }
+    }
+
+    fun stopTextToSpeech() {
+        textToSpeech?.apply {
+            stop()
+            shutdown()
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-
-        textToSpeech?.apply {
-            stop()
-            shutdown()
-        }
+        stopTextToSpeech()
     }
 }
 

@@ -65,8 +65,6 @@ object ViewModelModule {
             SafetySetting(HarmCategory.DANGEROUS_CONTENT, BlockThreshold.LOW_AND_ABOVE)
         )
 
-
-
         val model = GenerativeModel(
             modelName = "gemini-1.5-flash",
             apiKey = context.getString(R.string.gen_model_api_key),
