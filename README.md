@@ -16,6 +16,13 @@
   - Real-Time Monitoring: Tracks stress levels in real-time using connected devices (if applicable).
   Installation
 
+## Usage:
+  git clone https://github.com/varunkumar2004/SafeSpace.git
+  Open the project in Android Studio. Build and run the app on your Android device or emulator.
+  OR. You can download this app directly from Google Play Store (currently not available).
+  Launch the SafeSpace app on your Android device. Follow the on-screen instructions to input data or connect your device (if applicable for real-time monitoring).
+  View your stress level analysis and explore the suggested stress management techniques.
+
 ## Technologies Used
   Kotlin: The primary programming language used for developing the app's logic.
   Android Jetpack: Provides architecture components and tools for building a robust and efficient user interface.
